@@ -13,7 +13,7 @@ if len(liste_port) == 0:
     sys.exit(1)
 
 with serial.Serial(port=liste_port[0].device, baudrate=BAUDRATE) as arduino:
-    print(arduino.readline())
+    print(arduino.readline().decode("ascii").splitlines()[0])
     while True:
-        print(arduino.readline())
+        print(arduino.readline().decode("ascii").splitlines()[0])
 
