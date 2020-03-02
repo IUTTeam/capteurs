@@ -1,0 +1,30 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:             startup
+# Required-Start:       
+# Required-Stop:        
+# Default-Start:        2 3 4 5
+# Default-Stop:         
+# Short-Description:    Lanceur du script de mesures du RaspberryPi
+### END INIT INFO
+# -*- coding: utf-8 -*-
+
+sh /projetTut/lanceurLectureCapteurs.sh
+
+exit 0
+
+# ATTENTION !
+# → NE PAS SUPPRIMER LES COMMENTAIRES ANTÉRIEURS À CETTE LIGNE !
+# → Le nom de ce fichier (startup) et le path et nom du fichier
+#   /projetTut/lanceurLectureCapteurs.sh apparraisent dans le script d'installation.
+#
+# Ce fichier de script se place dans le dossier /etc/init.d, qui est un répertoire
+# rempli de scripts exécutables.
+# Pour rendre ce script exéctutable, il faut taper la commande "chmod +x startup",
+# cependant, ce ne sont pas les seules choses à faire.
+# Avoir seulement ce fichier exécutable dans le répertoire /etc/init.d ne le lance
+# pas au démarrage, init.d est juste un répertoire.
+# Pour ajouter ce script à la liste des services lancés lors du boot du Raspberry Pi,
+# il faut lancer la commande depuis le RPi lui-même :
+# "update-rc.d startup defaults" pour notre fichier dont le nom est "startup".
