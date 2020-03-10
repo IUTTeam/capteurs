@@ -23,57 +23,79 @@ let traiteurRequetes = async function(requete,reponse)
         	fonctionUtilisee = requeteParDefaut;
         	break;
     }
-    let retour = await fonctionUtilisee(requeteURL);
+    let retour = await fonctionUtilisee(requete);
     reponse.statusCode = retour.codeReponse;
     reponse.setHeader('Content-type', 'text/plain');
-    reponse.end(retour.json);
+    reponse.end(retour.reponse);
 }
 
-let envoyerDonneeAuServeur = async function(requeteURL) {
-	let json = null;
+let envoyerDonneeAuServeur = async function(requete) {
+	let reponse = null;
 	let codeReponse = null;
+
+	let mauvaiseRequete = false;
 
 	const connexionSQL = getConnexionSQL();
 
-    let type = requeteURL.searchParams.get(consts.REQUETE_CLE_TYPE);
-    let valeur = requeteURL.searchParams.get(consts.REQUETE_CLE_DATE);
-    let date = requeteURL.searchParams.get(consts.REQUETE_CLE_VALEUR);
+    if (requete.method === "POST") {
+    	let donneesPost = '';
+    	requete.on('data', function(partie) {
+        	donneesPost += partie.toString();
 
-    let estOK = type !== null && valeur !== null && date !== null;
+    	});
+    	requete.on('end', await async function() {
+    		try {
+	    		donneesPost = JSON.parse(donneesPost);
+	    		let type = donneesPost.type;
+	    		let donnees = donneesPost.donnees;
+		        const typeExiste = await typeDAO.typeExiste(connexionSQL, type);
+		        if (!typeExiste) {
+		        	await typeDAO.ajouterType(connexionSQL, type);
+		        }
+	    		for (let i = 0;i<donnees.length;i++) {
+	    			let valeurCourante = donnees[i][0];
+	    			let dateCourante = donnees[i][1];
+	    			await donneesDAO.ajouterDonnee(connexionSQL, type, valeur, date);
+	    		}
+	    		reponse = "OK";
+	    		codeReponse = consts.CODE_REPONSE_CORRECT;
+    		}
+    		catch (error) {
+    			console.log("ERREUR");
+    			mauvaiseRequete = true;
+    		}
+    	});
+    }
+    else {
+    	console.log(requete.method);
+    	mauvaiseRequete = true;
+    }
 
-	if (estOK) {
-        const typeExiste = await typeDAO.typeExiste(connexionSQL, type);
-        if (!typeExiste) {
-        	await typeDAO.ajouterType(connexionSQL, type);
-        }
-        json = await donneesDAO.ajouterDonnee(connexionSQL, type, valeur, date);
-        codeReponse = consts.CODE_REPONSE_CORRECT;
-	}
-	else {
-		json = consts.ERREUR_PREFIXE + consts.ERREUR_FORMAT_REQUETE_INCORRECT;
+	if (mauvaiseRequete) {
+		reponse = consts.ERREUR_PREFIXE + consts.ERREUR_REQUETE_INCORRECT;
 		codeReponse = consts.CODE_REPONSE_MAUVAISE_REQUETE;
 	}
 	return {
-		"json" : json,
+		"reponse" : reponse,
 		"codeReponse" : codeReponse,
 	}
 }
 
-let recevoirDonneeDeServeur = async function(requeteURL) {
-	let json = null;
+let recevoirDonneeDeServeur = async function(requete) {
+	let reponse = null;
 	let codeReponse = null;
 
 	const connexionSQL = getConnexionSQL();
 
 	return {
-		"json" : json,
+		"reponse" : reponse,
 		"codeReponse" : codeReponse,
 	}	
 }
 
-let requeteParDefaut = function(requeteURL) {
+let requeteParDefaut = function(requete) {
 	return {
-		"json" : consts.RETOUR_PAGE_ACCUEIL,
+		"reponse" : consts.RETOUR_PAGE_ACCUEIL,
 		"codeReponse" : consts.CODE_REPONSE_CORRECT,
 	}
 }
