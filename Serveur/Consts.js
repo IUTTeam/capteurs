@@ -20,6 +20,10 @@ exports.LIMITE_CONNEXIONS_SIMULTANNEES = 10;
 exports.URL_ENVOYER_SERVEUR = "/send_to_server";
 exports.URL_RECEVOIR_SERVEUR = "/request_from_server";
 
+exports.REQUETE_METHOD_POST = "POST";
+exports.REQUETE_METHOD_GET = "GET";
+
+
 exports.REQUETE_CLE_TYPE = "type";
 exports.REQUETE_CLE_DATE = "date";
 exports.REQUETE_CLE_VALEUR = "valeur";

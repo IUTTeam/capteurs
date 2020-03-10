@@ -38,7 +38,7 @@ let envoyerDonneeAuServeur = async function(requete, callback) {
 
 	const connexionSQL = getConnexionSQL();
 
-    if (requete.method === "POST") {
+    if (requete.method === REQUETE_METHODE_POST) {
     	let donneesPost = '';
     	requete.on('data', function(partie) {
         	donneesPost += partie.toString();
@@ -89,10 +89,17 @@ let recevoirDonneeDeServeur = async function(requete, callback) {
 
 	const connexionSQL = getConnexionSQL();
 
-	callback({
-		"reponse" : reponse,
-		"codeReponse" : codeReponse,
-	});	
+	if (requete.method === consts.REQUETE_METHODE_GET) {
+		
+	}
+	else {
+		callback({
+			"reponse" : consts.ERREUR_REQUETE_INCORRECT,
+			"codeReponse" : consts.CODE_REPONSE_MAUVAISE_REQUETE,
+		});	
+	}
+
+
 }
 
 let requeteParDefaut = function(requete, callback) {
