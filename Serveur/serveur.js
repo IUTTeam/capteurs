@@ -88,9 +88,30 @@ let recevoirDonneeDeServeur = async function(requete, callback) {
 	let codeReponse = null;
 
 	const connexionSQL = getConnexionSQL();
-
 	if (requete.method === consts.REQUETE_METHODE_GET) {
-		
+		const requeteURL = new URL(consts.PROTOCOLE + requete.headers.host + requete.url);
+		const type = requeteURL.searchParams.get("type");
+		const temponDebut = parseInt(requeteURL.searchParams.get("temponDebut"));
+		const temponFin = parseInt(requeteURL.searchParams.get("temponFin"));
+		if (type !== null && temponDebut !== null && temponFin !== null) {
+			let donnees = await donneesDAO.getDonneesDeTypeIntervalle(connexionSQL, type, temponDebut, temponFin);
+			let json = {};
+			json.type = type;
+			json.donnees = [];
+			donnees.forEach(function(donnee) {
+				json.donnees.push([donnee.valeur, donnee.date]);
+			});
+			callback({
+				"reponse" : JSON.stringify(json),
+				"codeReponse" : consts.CODE_REPONSE_CORRECT,
+			});			
+		}
+		else {
+			callback({
+				"reponse" : consts.ERREUR_REQUETE_INCORRECT,
+				"codeReponse" : consts.CODE_REPONSE_MAUVAISE_REQUETE,
+			});
+		}
 	}
 	else {
 		callback({
