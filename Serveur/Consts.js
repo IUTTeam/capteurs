@@ -17,8 +17,9 @@ exports.MOT_DE_PASSE_BASE_DE_DONNEES = "2511";
 exports.BASE_DE_DONNEES = "BDD_bboulle";
 exports.LIMITE_CONNEXIONS_SIMULTANNEES = 10;
 
-exports.URL_ENVOYER_SERVEUR = "/send_to_server";
-exports.URL_RECEVOIR_SERVEUR = "/request_from_server";
+exports.URL_ENVOYER_SERVEUR = "/send_data";
+exports.URL_RECEVOIR_SERVEUR = "/request_data";
+exports.URL_RECEVOIR_TYPES_SERVEUR = "/get_types";
 
 exports.REQUETE_METHODE_POST = "POST";
 exports.REQUETE_METHODE_GET = "GET";

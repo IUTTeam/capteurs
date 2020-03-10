@@ -13,11 +13,14 @@ let traiteurRequetes = async function(requete,reponse)
 	const requeteURL = new URL(consts.PROTOCOLE + requete.headers.host + requete.url);
 	let fonctionUtilisee = null;
     switch (requeteURL.pathname) {
-    	case consts.URL_ENVOYER_SERVEUR:
+    	case consts.URL_ENVOYER_DONNEES_SERVEUR:
     		fonctionUtilisee = envoyerDonneeAuServeur;
     		break;
-        case consts.URL_RECEVOIR_SERVEUR:
+        case consts.URL_RECEVOIR_DONNEES_SERVEUR:
         	fonctionUtilisee = recevoirDonneeDeServeur;
+        	break;
+        case consts.URL_RECEVOIR_TYPES_SERVEUR:
+        	fonctionUtilisee = recevoirTypesDeServeur;
         	break;
         default:
         	fonctionUtilisee = requeteParDefaut;
@@ -84,9 +87,6 @@ let envoyerDonneeAuServeur = async function(requete, callback) {
 }
 
 let recevoirDonneeDeServeur = async function(requete, callback) {
-	let reponse = null;
-	let codeReponse = null;
-
 	const connexionSQL = getConnexionSQL();
 	if (requete.method === consts.REQUETE_METHODE_GET) {
 		const requeteURL = new URL(consts.PROTOCOLE + requete.headers.host + requete.url);
@@ -119,8 +119,29 @@ let recevoirDonneeDeServeur = async function(requete, callback) {
 			"codeReponse" : consts.CODE_REPONSE_MAUVAISE_REQUETE,
 		});	
 	}
+}
 
-
+let recevoirTypesDeServeur = async function(requete, callback) {
+	const connexionSQL = getConnexionSQL();
+	if (requete.method === consts.REQUETE_METHODE_GET) {
+		const requeteURL = new URL(consts.PROTOCOLE + requete.headers.host + requete.url);
+		const types = await typeDAO.getTypes(connexionSQL);
+		let json = {};
+		json.types = [];
+		types.forEach(function(type) {
+			json.types.push(type[consts.ATTRIBUT_TYPE_NOM]);
+		});
+		callback({
+			"reponse" : JSON.stringify(json),
+			"codeReponse" : consts.CODE_REPONSE_CORRECT,
+		});
+	}
+	else {
+		callback({
+			"reponse" : consts.ERREUR_REQUETE_INCORRECT,
+			"codeReponse" : consts.CODE_REPONSE_MAUVAISE_REQUETE,
+		});		
+	}
 }
 
 let requeteParDefaut = function(requete, callback) {
@@ -139,7 +160,6 @@ let getConnexionSQL = function() {
 	  database: consts.BASE_DE_DONNEES,
 	})
 
-	// Ping database to check for common exception errors.
 	pool.getConnection((err, connection) => {
 	  if (err) {
 	    if (err.code === consts.ERREUR_CONNEXION_PERDUE) {

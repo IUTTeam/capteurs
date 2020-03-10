@@ -1,6 +1,6 @@
 PARTIE RECEPTION DES DONNÉES (du système embarqué):
 
-envoyer au serveur à l'url : NOM_SITE/send_to_server et au port : 1234 (temporaire)
+envoyer au serveur à l'url : NOM_SITE/send_data et au port : 1234 (temporaire)
 
 ...une méthode POST dont le body contient un JSON du format suivant :
 {
@@ -17,9 +17,10 @@ Les timestamps sont des timestamps UNIX classiques (càd nombre de secondes depu
 Pour le moment, une seul requête par type de données que l'on souhaite envoyer, si cela pose des contraintes à voir pour modifier l'architecture du JSON...
 
 
+
 PARTIE ENVOI DES DONNÉES (de l'application client):
 
-envoyer au serveur à l'url : NOM_SITE/request_from_server et au port : 1234
+envoyer au serveur à l'url : NOM_SITE/request_data et au port : 1234
 
 ...une méthode GET présisant le type de la donnée recherchée, et par 2 timestamps l'intervalle désirée. Les clés correspondantes sont "type", "temponDebut", "temponFin"
 ex : NOM_SITE/request_from_server?type=temperature&temponDebut=0&temponFin=2500

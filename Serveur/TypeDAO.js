@@ -5,6 +5,11 @@ exports.typeExiste = async function(connexionSQL, nomType) {
   return res.length > 0;
 }
 
+exports.getTypes = async function(connexionSQL) {
+	const types = await connexionSQL.query("SELECT " + consts.ATTRIBUT_TYPE_NOM + " FROM " + consts.TABLE_TYPES + ";");
+	return types;
+}
+
 exports.ajouterType = async function(connexionSQL, nomType) { 
   await Promise.all([connexionSQL.query("INSERT INTO " + consts.TABLE_TYPES + "(" + consts.ATTRIBUT_TYPE_NOM + ") VALUES ('" + nomType + "');"),
     connexionSQL.query("CREATE TABLE " + nomType + " (" + consts.ATTRIBUT_DONNEE_ID + " INTEGER PRIMARY KEY AUTO_INCREMENT, " + consts.ATTRIBUT_DONNEE_VALEUR + " INTEGER, " + consts.ATTRIBUT_DONNEE_DATE + " INTEGER);")]);
