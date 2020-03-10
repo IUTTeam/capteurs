@@ -44,8 +44,7 @@ let envoyerDonneeAuServeur = async function(requete, callback) {
         	donneesPost += partie.toString();
 
     	});
-    	requete.on('end', await async function() {
-    		console.log("requete end");
+    	requete.on('end', async function() {
     		try {
 	    		donneesPost = JSON.parse(donneesPost);
 	    		let type = donneesPost.type;
@@ -57,7 +56,7 @@ let envoyerDonneeAuServeur = async function(requete, callback) {
 	    		for (let i = 0;i<donnees.length;i++) {
 	    			let valeurCourante = donnees[i][0];
 	    			let dateCourante = donnees[i][1];
-	    			await donneesDAO.ajouterDonnee(connexionSQL, type, valeur, date);
+	    			donneesDAO.ajouterDonnee(connexionSQL, type, valeurCourante, dateCourante);
 	    		}
     		}
     		catch (error) {
@@ -106,7 +105,7 @@ let requeteParDefaut = function(requete, callback) {
 let getConnexionSQL = function() {
 	const pool = mysql.createPool({
 	  connectionLimit: consts.LIMITE_CONNEXIONS_SIMULTANNEES,
-	  host: consts.HOTE,
+	  host: consts.HOTE_BASE_DE_DONNEES,
 	  user: consts.UTILISATEUR_BASE_DE_DONNEES,
 	  password: consts.MOT_DE_PASSE_BASE_DE_DONNEES,
 	  database: consts.BASE_DE_DONNEES,
