@@ -23,16 +23,17 @@ let traiteurRequetes = async function(requete,reponse)
         	fonctionUtilisee = requeteParDefaut;
         	break;
     }
-    let retour = await fonctionUtilisee(requete);
-    reponse.statusCode = retour.codeReponse;
-    reponse.setHeader('Content-type', 'text/plain');
-    reponse.end(retour.reponse);
+
+    let envoyerReponse = function(retour) {
+        reponse.statusCode = retour.codeReponse;
+    	reponse.setHeader('Content-type', 'text/plain');
+    	reponse.end(retour.reponse); 	
+    }
+
+    await fonctionUtilisee(requete, envoyerReponse);
 }
 
-let envoyerDonneeAuServeur = async function(requete) {
-	let reponse = null;
-	let codeReponse = null;
-
+let envoyerDonneeAuServeur = async function(requete, callback) {
 	let mauvaiseRequete = false;
 
 	const connexionSQL = getConnexionSQL();
@@ -44,6 +45,7 @@ let envoyerDonneeAuServeur = async function(requete) {
 
     	});
     	requete.on('end', await async function() {
+    		console.log("requete end");
     		try {
 	    		donneesPost = JSON.parse(donneesPost);
 	    		let type = donneesPost.type;
@@ -57,47 +59,48 @@ let envoyerDonneeAuServeur = async function(requete) {
 	    			let dateCourante = donnees[i][1];
 	    			await donneesDAO.ajouterDonnee(connexionSQL, type, valeur, date);
 	    		}
-	    		reponse = "OK";
-	    		codeReponse = consts.CODE_REPONSE_CORRECT;
     		}
     		catch (error) {
-    			console.log("ERREUR");
-    			mauvaiseRequete = true;
+    			console.log(error);
+				callback({
+					"reponse" : consts.ERREUR_REQUETE_INCORRECT,
+					"codeReponse" : consts.CODE_REPONSE_MAUVAISE_REQUETE,
+				});
+			}
+    		if (!mauvaiseRequete) {
+	    		callback({
+					"reponse" : "OK",
+					"codeReponse" : consts.CODE_REPONSE_CORRECT,
+				});
     		}
     	});
     }
     else {
     	console.log(requete.method);
-    	mauvaiseRequete = true;
-    }
-
-	if (mauvaiseRequete) {
-		reponse = consts.ERREUR_PREFIXE + consts.ERREUR_REQUETE_INCORRECT;
-		codeReponse = consts.CODE_REPONSE_MAUVAISE_REQUETE;
-	}
-	return {
-		"reponse" : reponse,
-		"codeReponse" : codeReponse,
+		callback({
+			"reponse" : consts.ERREUR_REQUETE_INCORRECT,
+			"codeReponse" : consts.CODE_REPONSE_MAUVAISE_REQUETE,
+		});
 	}
 }
 
-let recevoirDonneeDeServeur = async function(requete) {
+let recevoirDonneeDeServeur = async function(requete, callback) {
 	let reponse = null;
 	let codeReponse = null;
 
 	const connexionSQL = getConnexionSQL();
 
-	return {
+	callback({
 		"reponse" : reponse,
 		"codeReponse" : codeReponse,
-	}	
+	});	
 }
 
-let requeteParDefaut = function(requete) {
-	return {
+let requeteParDefaut = function(requete, callback) {
+	callback({
 		"reponse" : consts.RETOUR_PAGE_ACCUEIL,
 		"codeReponse" : consts.CODE_REPONSE_CORRECT,
-	}
+	});
 }
 
 let getConnexionSQL = function() {
