@@ -4,11 +4,14 @@ int receivedMessage;
 
 int analogSensorPin = A5;
 
-const int READ_ANALOG_TEMP = 1 ;
+const int READ_ANALOG_TEMP = 1;
+
+const String START_MESSAGE = "Successfully initialised";
 
 void setup() {
   Serial.begin(9600); // opens serial port, sets data rate to 9600 bps
   Serial.setTimeout(20);
+  Serial.println(START_MESSAGE);
 }
 
 void loop() {

@@ -1,0 +1,1 @@
+READ_ANALOG_TEMP = "1"
