@@ -2,7 +2,7 @@
 
 int receivedMessage;
 
-int analogSensorPin = A5;
+int analogSensorPin = A5; // for KY-013 - Analog temperature
 
 const int READ_ANALOG_TEMP = 1;
 
