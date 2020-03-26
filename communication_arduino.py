@@ -5,6 +5,7 @@ import time
 import datetime
 import requests
 import consts
+import CommunicantTemperature
 
 BAUDRATE = 9600
 
@@ -18,18 +19,7 @@ if len(liste_port) == 0:
     print("Erreur : Pas de port trouvé")
     sys.exit(1)
 
-with serial.Serial(port=liste_port[0].device, baudrate=BAUDRATE) as arduino:
-    print(arduino.readline().decode("ascii").splitlines()[0])
-    while True:
-        message = consts.READ_ANALOG_TEMP
-        arduino.write(message.encode("utf-8"))
-        reponse = arduino.readline().decode("utf-8").splitlines()[0]
-        data = {
-            "type": "temperature",
-            "donnees": [
-                [reponse, time.time()]
-            ]
-        }
-        r = requests.post(consts.URL_ENREGISTREMENT, json=data)
-        print(data, r.text)
-        time.sleep(2)
+arduino = serial.Serial(port=liste_port[0].device, baudrate=BAUDRATE)
+print(arduino.readline().decode("ascii").splitlines()[0])
+comm = CommunicantTemperature.CommunicantTemperature(arduino, 2)
+comm.start()
