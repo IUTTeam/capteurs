@@ -26,7 +26,7 @@ class CommunicantDistance():
             ]
         }
         r = requests.post(consts.URL_ENREGISTREMENT, json=data)
-        print(data, r.text)
+        print(data, r.text[:3])
 
     def fonction_depart(self):
         self.envoyer_distance()
