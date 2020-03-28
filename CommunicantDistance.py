@@ -21,6 +21,7 @@ class CommunicantDistance():
     def envoyer_distance(self):
         data = {
             "type": "distance",
+            "unite": "cm",
             "donnees": [
                 [self.recuperer_distance(), time.time()]
             ]
