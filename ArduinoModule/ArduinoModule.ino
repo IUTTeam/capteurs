@@ -2,8 +2,8 @@
 
 #define analogSensorPin A5 // for KY-013 - Analog temperature
 
-#define trigPin 2
-#define echoPin 3
+#define trigPin 2 // for HC-SR04 - Ultrasound module
+#define echoPin 3 //
 
 
 const int READ_ANALOG_TEMP = 1;

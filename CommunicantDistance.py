@@ -4,32 +4,32 @@ import requests
 import time
 
 
-class CommunicantTemperature():
+class CommunicantDistance():
     def __init__(self, port_serie, delai, mutex):
         self.port_serie = port_serie
         self.delai = delai
         self.thread = Timer(self.delai, self.fonction_depart)
         self.mutex = mutex
 
-    def recuperer_temperature(self):
+    def recuperer_distance(self):
         self.mutex.acquire()
-        self.port_serie.write(consts.READ_ANALOG_TEMP.encode("utf-8"))
+        self.port_serie.write(consts.READ_DISTANCE.encode("utf-8"))
         reponse = self.port_serie.readline().decode("utf-8").splitlines()[0]
         self.mutex.release()
         return reponse
 
-    def envoyer_temperature(self):
+    def envoyer_distance(self):
         data = {
-            "type": "temperature",
+            "type": "distance",
             "donnees": [
-                [self.recuperer_temperature(), time.time()]
+                [self.recuperer_distance(), time.time()]
             ]
         }
         r = requests.post(consts.URL_ENREGISTREMENT, json=data)
         print(data, r.text)
 
     def fonction_depart(self):
-        self.envoyer_temperature()
+        self.envoyer_distance()
         self.thread = Timer(self.delai, self.fonction_depart)
         self.thread.start()
 

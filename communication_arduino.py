@@ -6,7 +6,8 @@ import datetime
 import requests
 import consts
 import CommunicantTemperature
-
+import CommunicantDistance
+import threading
 BAUDRATE = 9600
 
 # Programme de communication python arduino : ArduinoModule doit être dans l'arduino
@@ -21,5 +22,8 @@ if len(liste_port) == 0:
 
 arduino = serial.Serial(port=liste_port[0].device, baudrate=BAUDRATE)
 print(arduino.readline().decode("ascii").splitlines()[0])
-comm = CommunicantTemperature.CommunicantTemperature(arduino, 2)
+mutex = threading.Lock()
+comm = CommunicantTemperature.CommunicantTemperature(arduino, 2, mutex)
 comm.start()
+comm2 = CommunicantDistance.CommunicantDistance(arduino, 1, mutex)
+comm2.start()
