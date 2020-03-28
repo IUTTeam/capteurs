@@ -21,7 +21,7 @@ class CommunicantTemperature():
     def envoyer_temperature(self):
         data = {
             "type": "temperature",
-            "unite": "°C",
+            "unite": "C",
             "donnees": [
                 [self.recuperer_temperature(), time.time()]
             ]
