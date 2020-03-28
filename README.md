@@ -25,8 +25,16 @@ Le fichier du programme d'installation doit être exécutable (pas besoin de s'o
 
 Une fois la copie terminée, il est possible d'installer tous les prérequis via la commande :
 
+Pour avoir l'installateur doté d'une interface affichable en console :
+
 ```BASH
-sudo ./programmeInstallateur.sh
+sudo ./installateur.sh
+```
+
+Pour avoir l'ancien installateur en texte :
+
+```BASH
+sudo ./ancien_installateur.sh # n'exécutez pas cette commande si la première à fonctionné.
 ```
 
 Ce programme se chargera automatiquement de :
@@ -39,8 +47,5 @@ Ce programme se chargera automatiquement de :
 
 Le programme d'installation détecte automatiquement toute erreur lors de l'installation et annule la configuration automatique des scripts au démarrage en cas de problème.
 
-Pour l'instant, l'interface du programme d'installation est moche et est en texte, mais :
+Deux versions du programme installateur sont employables : l'une d'entre elle en mode texte pour pouvoir installer le programme dans l'hypothèse où l'autre installateur ne fonctionnerait pas, l'autre est un installateur doté d'une interface plus conviviale. Je pensais employer `dialog`, mais j'ai finalement utilisé `whiptail`. Il est plus léger et offre moins de possibilités, mais il sera parfait pour une utilisation sur Raspberry-Pi et ne requiert (normalement) pas d'installation de paquets supplémentaires.
 
-1. on s'en fout ;
-2. je ne pense pas que la commande BASH « `dialog` » est installée par défaut sur le Raspberry-Pi.  
-→ En revanche, pour un programme de configuration a destination de l'utilisateur final, ce serait intéressant de mettre ça en place. À voir.
