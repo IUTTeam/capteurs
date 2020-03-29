@@ -1,5 +1,7 @@
 #include <math.h>
 
+#define analogLuminPin A4 // for KY-018 - Photoresistor
+
 #define analogSensorPin A5 // for KY-013 - Analog temperature
 
 #define trigPin 2 // for HC-SR04 - Ultrasound module
@@ -8,6 +10,7 @@
 
 const int READ_ANALOG_TEMP = 1;
 const int READ_DISTANCE = 2;
+const int READ_LUMINOSITE = 3;
 
 const String START_MESSAGE = "Successfully initialised";
 
@@ -33,6 +36,9 @@ void loop() {
         break;
       case READ_DISTANCE:
         Serial.println(readDistance());
+        break;
+     case READ_LUMINOSITE:
+        Serial.println(readLuminosite());
         break;
       default:
         Serial.println("ERROR");
@@ -64,5 +70,8 @@ double readDistance() {
   // Calculate the distance:
   double distance = duration*0.034/2.;
   return distance;
-  
+}
+
+double readLuminosite() {
+  return ((1023. - analogRead(analogLuminPin)) / 1023.) * 100;
 }
