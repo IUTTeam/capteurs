@@ -4,33 +4,36 @@ import requests
 import time
 
 
-class CommunicantDistance():
-    def __init__(self, port_serie, delai, mutex):
+class Communication():
+    def __init__(self, port_serie, delai, type_mesure, unite, requete, mutex):
         self.port_serie = port_serie
         self.delai = delai
-        self.thread = Timer(self.delai, self.fonction_depart)
+        self.type = type_mesure
+        self.unite = unite
+        self.requete = requete
         self.mutex = mutex
+        self.thread = Timer(self.delai, self.fonction_depart)
 
-    def recuperer_distance(self):
+    def recuperer_donnee(self):
         self.mutex.acquire()
-        self.port_serie.write(consts.READ_DISTANCE.encode("utf-8"))
+        self.port_serie.write(self.requete.encode("utf-8"))
         reponse = self.port_serie.readline().decode("utf-8").splitlines()[0]
         self.mutex.release()
         return reponse
 
-    def envoyer_distance(self):
+    def envoyer_donnee(self):
         data = {
-            "type": "distance",
-            "unite": "cm",
+            "type": self.type,
+            "unite": self.unite,
             "donnees": [
-                [self.recuperer_distance(), time.time()]
+                [self.recuperer_donnee(), time.time()]
             ]
         }
         r = requests.post(consts.URL_ENREGISTREMENT, json=data)
         print(data, r.text[:3])
 
     def fonction_depart(self):
-        self.envoyer_distance()
+        self.envoyer_donnee()
         self.thread = Timer(self.delai, self.fonction_depart)
         self.thread.start()
 

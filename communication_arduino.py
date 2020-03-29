@@ -5,8 +5,7 @@ import time
 import datetime
 import requests
 import consts
-import CommunicantTemperature
-import CommunicantDistance
+import communication
 import threading
 BAUDRATE = 9600
 
@@ -23,7 +22,7 @@ if len(liste_port) == 0:
 arduino = serial.Serial(port=liste_port[0].device, baudrate=BAUDRATE)
 print(arduino.readline().decode("ascii").splitlines()[0])
 mutex = threading.Lock()
-comm = CommunicantTemperature.CommunicantTemperature(arduino, 2, mutex)
-comm.start()
-comm2 = CommunicantDistance.CommunicantDistance(arduino, 1, mutex)
-comm2.start()
+th_temperature = communication.Communication(arduino, 2, "temperature", "C", consts.READ_ANALOG_TEMP, mutex)
+th_temperature.start()
+th_distance = communication.Communication(arduino, 1, "distance", "cm", consts.READ_DISTANCE, mutex)
+th_distance.start()
