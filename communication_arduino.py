@@ -31,5 +31,5 @@ th_temperature = communication.Communication(arduino, 5, "temperature", "C", con
 th_temperature.start()
 th_distance = communication.Communication(arduino, 5, "distance", "cm", consts.READ_DISTANCE, mutex)
 th_distance.start()
-th_luminosite = communication.Communication(arduino, 5, "luminosite", "%", consts.READ_LUMINOSITE, mutex)
+th_luminosite = communication.Communication(arduino, 5, "luminosite", "pourcent", consts.READ_LUMINOSITE, mutex)
 th_luminosite.start()
