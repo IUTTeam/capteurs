@@ -7,6 +7,7 @@ import requests
 import consts
 import communication
 import threading
+import mesureDAO
 BAUDRATE = 9600
 
 # Programme de communication python arduino : ArduinoModule doit être dans l'arduino
@@ -21,6 +22,11 @@ if len(liste_port) == 0:
 
 arduino = serial.Serial(port=liste_port[0].device, baudrate=BAUDRATE)
 print(arduino.readline().decode("ascii").splitlines()[0])
+
+dao = mesureDAO.MesureDAO()
+dao.ajouter_mesure("unTest", "tst", 34, 122344885)
+dao.supprimer_mesure(122344355)
+print(dao.get_mesures())
 mutex = threading.Lock()
 th_temperature = communication.Communication(arduino, 2, "temperature", "C", consts.READ_ANALOG_TEMP, mutex)
 th_temperature.start()

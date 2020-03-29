@@ -1,4 +1,6 @@
 CREATE TABLE IF NOT EXISTS mesures (
-	humidite REAL
-	,temperature REAL
-	,insertion_datetime INTEGER)
+	type_mesure VARCHAR,
+	unite VARCHAR,
+	mesure FLOAT(10,4),
+	insertion_datetime INTEGER
+);

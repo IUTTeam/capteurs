@@ -21,6 +21,17 @@ db_cursor = db_connection.cursor()
 sqlite3.complete_statement(TableSchema)
 db_cursor.executescript(TableSchema)
 
+test = db_cursor.execute("SELECT name FROM sqlite_master WHERE type = \"table\"")
+for i in test:
+	print(i)
+
+db_cursor.execute("INSERT INTO mesures (type_mesure, unite, mesure, insertion_datetime) VALUES ('test', 'cm', 33.2, 1568865886);")
+db_connection.commit()
+
+test = db_cursor.execute("SELECT * FROM mesures")
+for i in test:
+	print(i)
+
 # Fermeture de la Base de données
 db_cursor.close()
 db_connection.close()
