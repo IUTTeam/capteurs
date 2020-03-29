@@ -2,6 +2,7 @@ from threading import Timer, Thread, Event, Lock
 import consts
 import requests
 import time
+import mesureDAO
 
 
 class Communication():
@@ -22,15 +23,48 @@ class Communication():
         return reponse
 
     def envoyer_donnee(self):
+        mesure = self.recuperer_donnee()
+        time_mesure = time.time()
         data = {
             "type": self.type,
             "unite": self.unite,
             "donnees": [
-                [self.recuperer_donnee(), time.time()]
+                [mesure, time_mesure]
             ]
         }
-        r = requests.post(consts.URL_ENREGISTREMENT, json=data)
-        print(data, r.text[:3])
+        mesure_envoyee = False
+        try:
+            reponse = requests.post(consts.URL_ENREGISTREMENT, json=data)
+            mesure_envoyee = reponse.text[:3] == "Don"
+        except requests.ConnectionError as connection_error:
+            print("Erreur de connection")
+            mesure_envoyee = False
+        if (mesure_envoyee):
+            print(time.asctime(time.gmtime(time_mesure)), self.type, "OK")
+            dao = mesureDAO.MesureDAO()
+            liste_mesures = dao.get_mesures()
+            for mesure in liste_mesures:
+                data = {
+                    "type": mesure[0],
+                    "unite": mesure[1],
+                    "donnees": [
+                        [mesure[2], mesure[3]]
+                    ]
+                }
+                envoi = False
+                try:
+                    reponse = requests.post(
+                        consts.URL_ENREGISTREMENT, json=data)
+                    envoi = reponse.text[:3] == "Don"
+                except requests.ConnectionError as connection_error:
+                    envoi = False
+                if envoi:
+                    dao.supprimer_mesure(mesure[3])
+
+        else:
+            print(time.asctime(time.gmtime(time_mesure)), self.type, "KO")
+            dao = mesureDAO.MesureDAO()
+            dao.ajouter_mesure(self.type, self.unite, mesure, time_mesure)
 
     def fonction_depart(self):
         self.envoyer_donnee()

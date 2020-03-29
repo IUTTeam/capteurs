@@ -24,7 +24,6 @@ arduino = serial.Serial(port=liste_port[0].device, baudrate=BAUDRATE)
 print(arduino.readline().decode("ascii").splitlines()[0])
 
 dao = mesureDAO.MesureDAO()
-dao.ajouter_mesure("unTest", "tst", 34, 122344885)
 dao.supprimer_mesure(122344355)
 print(dao.get_mesures())
 mutex = threading.Lock()
