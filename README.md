@@ -11,6 +11,20 @@ Il faut installer `pyserial` pour communiquer avec l'Arduino :
 pip3 install pyserial
 ```
 
+> La carte arduino doit contenir le programme `ArduinoModule` pour fonctionner avec le Raspberry
+
+## Interface d'administration
+
+Il faut `flask` pour gérer les capteurs :
+```BASH
+pip3 install flask
+```
+La gestion des capteurs se fait via un navigateur grâce à un mini serveur web sur le Raspberry.
+
+### Fonctionnement de flask
+- les données statiques (css) se trouvent dans le dossier `static`
+- les templates se trouvent dans le dossier `templates`
+
 ## Programme d'installation
 
 ### Copie des fichiers sur le Raspberry-Pi
