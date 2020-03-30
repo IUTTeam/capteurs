@@ -2,9 +2,9 @@ READ_ANALOG_TEMP = "1"
 READ_DISTANCE = "2"
 READ_LUMINOSITE = "3"
 
-CAPTEUR_TEMPERATURE = {"type": "temperaturetest", "unite": "C", "requete": READ_ANALOG_TEMP}
-CAPTEUR_DISTANCE    = {"type": "distancetest", "unite": "cm", "requete": READ_DISTANCE}
-CAPTEUR_LUMINOSITE  = {"type": "luminositetest", "unite": "pourcent", "requete": READ_LUMINOSITE}
+CAPTEUR_TEMPERATURE = {"type": "temperature", "unite": "C", "requete": READ_ANALOG_TEMP}
+CAPTEUR_DISTANCE    = {"type": "distance", "unite": "cm", "requete": READ_DISTANCE}
+CAPTEUR_LUMINOSITE  = {"type": "luminosite", "unite": "pourcent", "requete": READ_LUMINOSITE}
 
 CAPTEURS = [CAPTEUR_TEMPERATURE, CAPTEUR_DISTANCE, CAPTEUR_LUMINOSITE]
 

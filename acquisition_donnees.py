@@ -37,7 +37,7 @@ def start():
 
     dao = mesureDAO.MesureDAO()
     th_temperature = communication.Communication(
-        arduino, 5, consts.CAPTEUR_TEMPERATURE, "temperaturetest", mutex)
+        arduino, 5, consts.CAPTEUR_TEMPERATURE, "temperature", mutex)
     th_temperature.start()
     liste_th.append(th_temperature)
     capteurs_libre.remove(consts.CAPTEUR_TEMPERATURE)
