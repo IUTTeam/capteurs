@@ -10,15 +10,20 @@ import consts
 import communication
 import threading
 import mesureDAO
+import copy
 BAUDRATE = 9600
 
 app = Flask(__name__)
 
 liste_th = []
-capteurs_libre = consts.CAPTEURS
+capteurs_libre = copy.deepcopy(consts.CAPTEURS)
+arduino = None
+mutex = threading.Lock()
+
 
 @app.before_first_request
 def start():
+    global arduino
     liste_port = []
     for port in serial.tools.list_ports.comports():
         liste_port.append(port)
@@ -31,7 +36,6 @@ def start():
     print(arduino.readline().decode("ascii").splitlines()[0])
 
     dao = mesureDAO.MesureDAO()
-    mutex = threading.Lock()
     th_temperature = communication.Communication(
         arduino, 5, consts.CAPTEUR_TEMPERATURE, "temperaturetest", mutex)
     th_temperature.start()
@@ -43,7 +47,7 @@ def start():
     # th_luminosite = communication.Communication(
     #     arduino, 5, "luminositetest", "pourcent", consts.READ_LUMINOSITE, mutex)
     # th_luminosite.start()
-    
+
     # liste_th.append(th_distance)
     # liste_th.append(th_luminosite)
 
@@ -59,12 +63,46 @@ def result():
       result = request.form
       return render_template("result.html", result=result)
 
+
 @app.route("/modifier/<requete_arduino>")
 def modifier(requete_arduino):
     for thread in liste_th:
         if thread.requete == requete_arduino:
             return render_template("modification.html", capteur=thread)
     return "oh nn"
+
+
+@app.route("/supprimer/<requete_arduino>")
+def supprimer(requete_arduino):
+    for thread in liste_th:
+        if thread.requete == requete_arduino:
+            thread.cancel()
+            for capteur in consts.CAPTEURS:
+                print(capteur)
+                if capteur["requete"] == requete_arduino:
+                    capteurs_libre.append(capteur)
+            liste_th.remove(thread)
+            return "OK"
+    return "oh nn"
+
+
+@app.route("/ajout")
+def ajout():
+    return render_template("ajout.html", capteurs_libre=capteurs_libre)
+
+
+@app.route("/ajouter", methods=["POST", "GET"])
+def ajouter():
+    resultat = request.form
+    requete = resultat["type"]
+    for capteur in capteurs_libre:
+        if capteur["requete"] == requete:
+            thread = communication.Communication(arduino, int(
+                resultat["frequence"]), capteur, resultat["nom"], mutex)
+            capteurs_libre.remove(capteur)
+            liste_th.append(thread)
+            thread.start()
+    return "ok"
 
 
 @app.route("/enregistrer", methods=["POST", "GET"])
@@ -74,7 +112,8 @@ def enregistrer():
     for thread in liste_th:
         if thread.requete == resultat["requete"]:
             thread.cancel()
-            nouveau_thread = communication.Communication(thread.port_serie, int(resultat["frequence"]), thread.type, thread.unite, thread.requete, thread.mutex)
+            nouveau_thread = communication.Communication(thread.port_serie, int(
+                resultat["frequence"]), thread.type, thread.unite, thread.requete, thread.mutex)
             liste_th.remove(thread)
             liste_th.append(nouveau_thread)
             nouveau_thread.start()

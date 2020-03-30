@@ -14,12 +14,11 @@
         <p>Unité : {{thread.unite}}</p>
         <p>Fréquence : {{thread.delai}} s</p>
         <a href="modifier/{{ thread.requete }}">Modifier</a>
+        <a href="supprimer/{{ thread.requete }}">Supprimer</a>
     </div>
     {% endfor %}
 
-    {% for capteur in capteurs_libre %}
-    <p>{{ capteur["type"] }}</p>
-    {% endfor %}
+    <a href="ajout">Ajouter un capteur</a>
 </body>
 
 </html>
