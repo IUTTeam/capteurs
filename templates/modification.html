@@ -9,9 +9,13 @@
 
 <body>
     <form action="/enregistrer" method="POST">
+        <h1>Modification d'un capteur</h1>
         <p>
-            <label for="nom-donnee">Type : </label>
-            <input type="text" name="nom-donnee" id="nom-donnee" value="{{ capteur.type }}">
+            <p>Type : {{ capteur.type }}</p>
+        </p>
+        <p>
+            <label for="nom-donnee">Nom : </label>
+            <input type="text" name="nom-donnee" id="nom-donnee" value="{{ capteur.nom_mesure }}">
         </p>
         <p>
             <label for="frequence"> Fréquence</label>
@@ -20,7 +24,7 @@
         <input type="text" name="requete" value="{{ capteur.requete }}" hidden>
         <input type="submit" value="Modifier">
     </form>
-
+    <a href="/">Accueil</a>
 </body>
 
 </html>

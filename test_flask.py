@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 import serial
 import serial.tools.list_ports
@@ -82,7 +82,7 @@ def supprimer(requete_arduino):
                 if capteur["requete"] == requete_arduino:
                     capteurs_libre.append(capteur)
             liste_th.remove(thread)
-            return "OK"
+            return render_template("ok.html")
     return "oh nn"
 
 
@@ -97,28 +97,30 @@ def ajouter():
     requete = resultat["type"]
     for capteur in capteurs_libre:
         if capteur["requete"] == requete:
-            thread = communication.Communication(arduino, int(
+            thread = communication.Communication(arduino, float(
                 resultat["frequence"]), capteur, resultat["nom"], mutex)
             capteurs_libre.remove(capteur)
-            liste_th.append(thread)
             thread.start()
-    return "ok"
+            liste_th.append(thread)
+    return render_template("ok.html")
 
 
 @app.route("/enregistrer", methods=["POST", "GET"])
 def enregistrer():
     resultat = request.form
-    print(resultat["requete"])
     for thread in liste_th:
         if thread.requete == resultat["requete"]:
             thread.cancel()
-            nouveau_thread = communication.Communication(thread.port_serie, int(
-                resultat["frequence"]), thread.type, thread.unite, thread.requete, thread.mutex)
+            requete = resultat["requete"]
+            for capteur in consts.CAPTEURS:
+                if capteur["requete"] == requete:
+                    nouveau_thread = communication.Communication(thread.port_serie, float(
+                        resultat["frequence"]), capteur, resultat["nom-donnee"], thread.mutex)
             liste_th.remove(thread)
             liste_th.append(nouveau_thread)
             nouveau_thread.start()
             print(liste_th)
-    return "OK"
+    return render_template("ok.html")
 
 
 def start_runner():

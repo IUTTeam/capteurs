@@ -11,6 +11,7 @@
     {% for thread in liste %}
     <div class="inline-block">
         <p>Type : {{thread.type}}</p>
+        <p>Nom : {{thread.nom_mesure}}</p>
         <p>Unité : {{thread.unite}}</p>
         <p>Fréquence : {{thread.delai}} s</p>
         <a href="modifier/{{ thread.requete }}">Modifier</a>

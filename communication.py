@@ -41,7 +41,7 @@ class Communication():
             print("Erreur de connection")
             mesure_envoyee = False
         if (mesure_envoyee):
-            print(time.asctime(time.gmtime(time_mesure)), self.type, "OK")
+            print(time.asctime(time.gmtime(time_mesure)), self.nom_mesure, "OK")
             dao = mesureDAO.MesureDAO()
             liste_mesures = dao.get_mesures()
             for mesure in liste_mesures:
@@ -63,7 +63,7 @@ class Communication():
                     dao.supprimer_mesure(mesure[3])
 
         else:
-            print(time.asctime(time.gmtime(time_mesure)), self.type, "KO")
+            print(time.asctime(time.gmtime(time_mesure)), self.nom_mesure, "KO")
             dao = mesureDAO.MesureDAO()
             dao.ajouter_mesure(self.nom_mesure, self.unite, mesure, time_mesure)
 
