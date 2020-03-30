@@ -6,12 +6,13 @@ import mesureDAO
 
 
 class Communication():
-    def __init__(self, port_serie, delai, type_mesure, unite, requete, mutex):
+    def __init__(self, port_serie, delai, capteur, nom_mesure, mutex):
         self.port_serie = port_serie
         self.delai = delai
-        self.type = type_mesure
-        self.unite = unite
-        self.requete = requete
+        self.type = capteur["type"]
+        self.unite = capteur["unite"]
+        self.requete = capteur["requete"]
+        self.nom_mesure = nom_mesure
         self.mutex = mutex
         self.thread = Timer(self.delai, self.fonction_depart)
 
@@ -26,7 +27,7 @@ class Communication():
         mesure = self.recuperer_donnee()
         time_mesure = time.time()
         data = {
-            "type": self.type,
+            "type": self.nom_mesure,
             "unite": self.unite,
             "donnees": [
                 [mesure, time_mesure]
@@ -64,7 +65,7 @@ class Communication():
         else:
             print(time.asctime(time.gmtime(time_mesure)), self.type, "KO")
             dao = mesureDAO.MesureDAO()
-            dao.ajouter_mesure(self.type, self.unite, mesure, time_mesure)
+            dao.ajouter_mesure(self.nom_mesure, self.unite, mesure, time_mesure)
 
     def fonction_depart(self):
         self.envoyer_donnee()

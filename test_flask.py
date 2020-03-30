@@ -15,6 +15,7 @@ BAUDRATE = 9600
 app = Flask(__name__)
 
 liste_th = []
+capteurs_libre = consts.CAPTEURS
 
 @app.before_first_request
 def start():
@@ -32,22 +33,24 @@ def start():
     dao = mesureDAO.MesureDAO()
     mutex = threading.Lock()
     th_temperature = communication.Communication(
-        arduino, 5, "temperaturetest", "C", consts.READ_ANALOG_TEMP, mutex)
+        arduino, 5, consts.CAPTEUR_TEMPERATURE, "temperaturetest", mutex)
     th_temperature.start()
-    th_distance = communication.Communication(
-        arduino, 5, "distancetest", "cm", consts.READ_DISTANCE, mutex)
-    # th_distance.start()
-    th_luminosite = communication.Communication(
-        arduino, 5, "luminositetest", "pourcent", consts.READ_LUMINOSITE, mutex)
-    # th_luminosite.start()
     liste_th.append(th_temperature)
+    capteurs_libre.remove(consts.CAPTEUR_TEMPERATURE)
+    # th_distance = communication.Communication(
+    #     arduino, 5, "distancetest", "cm", consts.READ_DISTANCE, mutex)
+    # # th_distance.start()
+    # th_luminosite = communication.Communication(
+    #     arduino, 5, "luminositetest", "pourcent", consts.READ_LUMINOSITE, mutex)
+    # th_luminosite.start()
+    
     # liste_th.append(th_distance)
     # liste_th.append(th_luminosite)
 
 
 @app.route('/')
 def index():
-   return render_template('index.html', liste=liste_th)
+    return render_template('index.html', liste=liste_th, capteurs_libre=capteurs_libre)
 
 
 @app.route('/result', methods=['POST', 'GET'])
