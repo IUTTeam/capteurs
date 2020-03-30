@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Modification</title>
+</head>
+
+<body>
+    <form action="/enregistrer" method="POST">
+        <p>
+            <label for="nom-donnee">Type : </label>
+            <input type="text" name="nom-donnee" id="nom-donnee" value="{{ capteur.type }}">
+        </p>
+        <p>
+            <label for="frequence"> Fréquence</label>
+            <input type="number" name="frequence" id="frequence" value="{{ capteur.delai }}">
+        </p>
+        <input type="text" name="requete" value="{{ capteur.requete }}" hidden>
+        <input type="submit" value="Modifier">
+    </form>
+
+</body>
+
+</html>

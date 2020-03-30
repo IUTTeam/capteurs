@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Configuration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    {% for thread in liste %}
+    <div class="inline-block">
+       <p>Type : {{thread.type}}</p>
+       <p>Unité : {{thread.unite}}</p>
+       <p>Fréquence : {{thread.delai}} s</p>
+       <a href="modifier/{{ thread.requete }}">Modifier</a>
+    </div>
+    {% endfor %}
+</body>
+
+</html>
