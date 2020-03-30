@@ -142,4 +142,4 @@ def start_runner():
 
 if __name__ == '__main__':
     start_runner()
-    app.run(debug=True)
+    app.run(host="0.0.0.0")
