@@ -17,7 +17,7 @@ echo "                                                                    "
 
 # on pourrait aussi changer le fichier motd…
 
-python /projetTut/acquisition_donnees.py
+python3 /projetTut/acquisition_donnees.py
 
 # Attention ! Le nom de ce fichier apparait dans le programme d'installation.
 # Ce fichier permet le changement du path et du nom de /projetTut/acquisition_donnees.py

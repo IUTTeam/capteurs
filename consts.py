@@ -11,4 +11,4 @@ CAPTEURS = [CAPTEUR_TEMPERATURE, CAPTEUR_DISTANCE, CAPTEUR_LUMINOSITE]
 URL_ENREGISTREMENT = "https://service.frfr.duckdns.org/send_data"
 
 NOM_BDD = "BDD_PROJET_TUT_PI"
-INITIALISATION_SQL = "creation-table.sql"
+INITIALISATION_SQL = "/projetTut/creation-table.sql"
