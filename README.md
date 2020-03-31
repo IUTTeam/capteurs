@@ -35,7 +35,7 @@ La gestion des capteurs se fait via un navigateur grâce à un mini serveur web 
 
 ### Copie des fichiers sur le Raspberry-Pi
 
-Tous les fichiers contenu dans ce répertoire sont à copier sur le Rapsberry-Pi dans `/ProjetTut`.
+Tous les fichiers contenu dans ce répertoire sont à copier sur le Rapsberry-Pi dans `/projetTut`.
 
 Il est nécessaire de ne pas changer les noms des fichiers de ce répertoire, ou, le cas échéant, d'ouvrir tous les fichiers afin de s'assurer que toutes les occurrences du nom de fichier modifié ont elles-aussi été modifiées (les occurrences sont indiquées dans des commentaires dans les fichiers où elles se trouvent).
 
