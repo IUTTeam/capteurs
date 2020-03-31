@@ -63,12 +63,12 @@ def modifier(requete_arduino):
 def supprimer(requete_arduino):
     for thread in threads_en_cours:
         if thread.requete == requete_arduino:
-            thread.cancel()
             for capteur in consts.CAPTEURS:
                 print(capteur)
                 if capteur["requete"] == requete_arduino:
                     capteurs_libre.append(capteur)
             threads_en_cours.remove(thread)
+            thread.cancel()
             return render_template("ok.html")
     return "oh nn"
 
