@@ -152,6 +152,9 @@ majprogress "$operation" 48 && pip3 install pyserial || echec "$operation"
 operation="Installation des bibliothèques Python requises à l'envoi de requêtes HTTP"
 majprogress "$operation" 56 && pip3 install requests || echec "$operation"
 
+operation="Installation des bibliothèques Python requises à l'installation d'une bibliothèque"
+majprogress "$operation" 56 && pip3 install setuptools || echec "$operation"
+
 operation="Installation des bibliothèques Python requises à la mise en place d'une page Web de configuration"
 majprogress "$operation" 64 && pip3 install flask || echec "$operation"
 
@@ -162,7 +165,7 @@ operation="Installation de SQLite"
 majprogress "$operation" 80 && apt install sqlite3 libsqlite3-dev || echec "$operation"
 
 operation="Installation des librairies Python SQLite"
-majprogress "$operation" 88 && pip3 install pysqlite || echec "$operation"
+majprogress "$operation" 88 && pip3 install pysqlite3 || echec "$operation"
 
 operation="Création de la base de données SQLite"
 majprogress "$operation" 96 && python /projetTut/database-initialisation.py && chmod 666 /projetTut/BDD_PROJET_TUT_PI || echec "$operation"
