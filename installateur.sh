@@ -8,10 +8,13 @@ titre="Installation programme projet tutoré"
 # finalement j'utilise whiptail plutôt que dialog.
 # je connaissais pas mais c'est plus simple à utiliser.
 
+operationEchouee="pas d'échec"
+
 function echec ()
 {
 	whiptail --title "Erreur" --backtitle "$titre" --ok-button "poursuivre" --msgbox "L'opération \"$1\" à échoué !" 8 78
 	errorFlag=true
+	operationEchouee=$1
 }
 
 function reussite ()
@@ -21,7 +24,7 @@ function reussite ()
 
 function majprogress ()
 {
-	echo $2 | whiptail --title "Installation" --backtitle "$titre" --gauge "$1" 6 78 0
+	echo $2 | whiptail --title "Installation" --backtitle "$titre" --gauge "$1" 7 78 0
 	# la barre de progression va prendre la valeur d'avancement contenue dans $2.
 }
 
@@ -125,35 +128,44 @@ fi
 operation="Installation du fichier de lancement automatique de l'application dans init.d"
 # on ajoute notre fichier startup dans le répertoire des scripts à lancer au démarrage.
 # et on rend notre fichier startup executable
-cp /projetTut/startup /etc/init.d/startup && chmod 555 /etc/init.d/startup || echec "$operation"
+majprogress "$operation" 08 && cp /projetTut/startup /etc/init.d/startup && chmod 555 /etc/init.d/startup || echec "$operation"
 # On n'ajoute notre fichier startup dans la liste des scripts à lancer au démarrage QUE si tout le reste de l'installation réussit.
 
 operation="Configuration des fichiers locaux de /projetTut"
-majprogress "$operation" 15 && chmod 555 /projetTut/lanceurLectureCapteurs.sh || echec "$operation"
+majprogress "$operation" 16 && chmod 555 /projetTut/lanceurLectureCapteurs.sh || echec "$operation"
 
 operation="Installation de Python"
-majprogress "$operation" 25 && apt install python python3 python-dev build-essential || echec "$operation"
+majprogress "$operation" 24 && apt install python python-dev || echec "$operation"
 
-operation="Installation du gestionnaire de bibliothèques Python “PIP”"
-majprogress "$operation" 35 && apt install python-pip || echec "$operation"
+operation="Installation de Python 3"
+majprogress "$operation" 32 && apt install python3 python3-dev || echec "$operation"
+
+# operation="Installation du gestionnaire de bibliothèques Python “PIP”"
+# majprogress "$operation" 36 && apt install python-pip || echec "$operation"
+
+operation="Installation du gestionnaire de bibliothèques Python 3 “PIP3”"
+majprogress "$operation" 40 && apt install python3-pip || echec "$operation"
 
 operation="Installation des bibliothèques Python requises à la communication avec l'Arduino"
-majprogress "$operation" 45 && pip install pyserial || echec "$operation"
+majprogress "$operation" 48 && pip3 install pyserial || echec "$operation"
 
-operation="Installation des bibliothèques Python requises à l'envoi de requêtes HTML"
-majprogress "$operation" 55 && pip install requests || echec "$operation"
+operation="Installation des bibliothèques Python requises à l'envoi de requêtes HTTP"
+majprogress "$operation" 56 && pip3 install requests || echec "$operation"
+
+operation="Installation des bibliothèques Python requises à la mise en place d'une page Web de configuration"
+majprogress "$operation" 64 && pip3 install flask || echec "$operation"
 
 operation="Instalation des utilitaires de compilation requis à l'instalation des bibliothèques Python SQLite…"
-majprogress "$operation" 65 && apt install build-essential python-dev git scons swig || echec "$operation"
+majprogress "$operation" 72 && apt install build-essential git scons swig || echec "$operation"
 
 operation="Installation de SQLite"
-majprogress "$operation" 75 && apt install sqlite3 libsqlite3-dev || echec "$operation"
+majprogress "$operation" 80 && apt install sqlite3 libsqlite3-dev || echec "$operation"
 
 operation="Installation des librairies Python SQLite"
-majprogress "$operation" 85 && pip install pysqlite || echec "$operation"
+majprogress "$operation" 88 && pip3 install pysqlite || echec "$operation"
 
 operation="Création de la base de données SQLite"
-majprogress "$operation" 95 && python /projetTut/database-initialisation.py && chmod 666 /projetTut/BDD_PROJET_TUT_PI || echec "$operation"
+majprogress "$operation" 96 && python /projetTut/database-initialisation.py && chmod 666 /projetTut/BDD_PROJET_TUT_PI || echec "$operation"
 
 reussite "installation"
 
@@ -161,25 +173,27 @@ clear
 
 if [ "$errorFlag" = true ] ; then
 
-	whiptail --title "Erreur" --backtitle "$titre" --ok-button "quitter" --msgbox "Le programme d'installation s'est terminé en rencontrant des erreurs.\nPour éviter tout risque, le programme de lecture des capteurs n'a pas été ajouté à la liste des programmes à charger au démarrage." 12 78
+	whiptail --title "Erreur fatale" --backtitle "$titre" --ok-button "quitter" --msgbox "Le programme d'installation s'est terminé en rencontrant des erreurs.\nPour éviter tout risque, le programme de lecture des capteurs n'a pas été ajouté à la liste des programmes à charger au démarrage." 12 78
 
-    echo -e "\e[1;31mLe programme d'installation s'est terminé en rencontrant des erreurs.\e[0m"
+    echo -e "\e[1;31mLe programme d'installation s'est terminé en rencontrant des erreurs.\nL'opération \"$operationEchouee\" a échouée.\e[0m"
     echo "Pour éviter tout risque, le programme de lecture des capteurs n'a pas été ajouté à la liste des programmes à charger au démarrage."
 
     exit 1
 
 else
 
-	whiptail --title "Réussite" --backtitle "$titre" --ok-button "terminer" --msgbox "Le programme d'installation s'est terminé sans rencontrer d'erreur.\nAjout du fichier de lancement automatique dans la liste des programmes à lancer automatiquement…" 12 78
+	operation="Ajout du fichier de lancement automatique dans la liste des programmes à lancer au démarrage."
+
+	whiptail --title "Réussite" --backtitle "$titre" --ok-button "terminer" --msgbox "Le programme d'installation s'est terminé sans rencontrer d'erreur.\n$operation" 12 78
 
 	# ajout de notre fichier startup dans la liste des scripts à lancer au démarrage.
-	#######################################################################################################################
-	# POUR QU'UN PROBLÈME D'INSTALLATION NE SOIT PAS HANDICAPANT, IL FAUDRAIT PLACER CETTE LIGNE EN TOUTE FIN DE FICHIER. #
-	# DE CETTE FAÇON, SI UNE ÉTAPE DE L'INSTALLATION ÉCHOUE, LE PROGRAMME N'EST PAS LANCÉ AU DÉMARRAGE.                   #
-	#######################################################################################################################
-	update-rc.d startup defaults || echec "Ajout du fichier de lancement automatique dans la liste des programmes à lancer automatiquement"
+	#######################################################################################################
+	# POUR QU'UN PROBLÈME D'INSTALLATION NE SOIT PAS HANDICAPANT, CETTE LIGNE EST EN TOUTE FIN DE FICHIER #
+	# DE CETTE FAÇON, SI UNE ÉTAPE DE L'INSTALLATION ÉCHOUE, LE PROGRAMME N'EST PAS LANCÉ AU DÉMARRAGE    #
+	#######################################################################################################
+	update-rc.d startup defaults || echec "$operation"
 
-	whiptail --title "Redémarrage…" --backtitle "$titre" --infobox "Un redémarrage est nécessaire pour compléter l'installation.\n\nRedémarrage en cours…" 10 78
+	whiptail --title "Redémarrage…" --backtitle "$titre" --infobox "Un redémarrage est nécessaire pour compléter l'installation.\n\nRedémarrage imminent…" 10 78
 
 	reboot
 fi

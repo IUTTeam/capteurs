@@ -80,25 +80,36 @@ cp /projetTut/startup /etc/init.d/startup && chmod 555 /etc/init.d/startup && ec
 echo "Configuration des fichiers locaux de /projetTut…"
 chmod 555 /projetTut/lanceurLectureCapteurs.sh && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
 
-echo "Installation de Python…"
-apt install python python3 python-dev build-essential && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
+# echo "Installation de Python…"
+# apt install python python3 python-dev build-essential && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
 
-echo "Installation du gestionnaire de bibliothèques Python “PIP”…"
-apt install python-pip && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
+# echo "Installation du gestionnaire de bibliothèques Python “PIP”…"
+# apt install python-pip && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
 
-echo "Installation des bibliothèques Python requises à la communication avec l'Arduino…"
-pip install pyserial && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
+# QUICK-FIX PYTHON 3
 
-echo "Installation des bibliothèques Python requises à l'envoi de requêtes HTML…"
-pip install requests && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
+echo "Installation de Python 3…"
+apt install python3 python3-dev && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
 
-echo "Instalation des utilitaires de compilation requis à l'instalation des bibliothèques Python SQLite…"
+echo "Installation du gestionnaire de bibliothèques Python 3 “PIP3”…"
+apt install python3-pip && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
+
+echo "Installation des bibliothèques Python 3 requises à la communication avec l'Arduino…"
+pip3 install pyserial && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
+
+echo "Installation des bibliothèques Python 3 requises à l'envoi de requêtes HTML…"
+pip3 install requests && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
+
+echo "Installation des bibliothèques Python requises à la mise en place d'une page Web de configuration…"
+pip3 install flask && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
+
+echo "Instalation des utilitaires de compilation requis à l'instalation des bibliothèques Python 3 SQLite…"
 apt install build-essential python-dev git scons swig && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
 
 echo "Installation de SQLite…"
 apt install sqlite3 libsqlite3-dev && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
 
-echo "Installation des librairies Python SQLite…"
+echo "Installation des librairies Python 3 SQLite…"
 pip install pysqlite && echo -e "\e[32m→ fait !\e[0m" || { echo -e "\e[1;31m→ ÉCHEC.\e[0m"; errorFlag=true; };
 
 echo "Création de la base de données SQLite…"

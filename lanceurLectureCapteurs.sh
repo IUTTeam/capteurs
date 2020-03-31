@@ -17,8 +17,8 @@ echo "                                                                    "
 
 # on pourrait aussi changer le fichier motd…
 
-python /projetTut/communication_arduino.py
+python /projetTut/acquisition_donnees.py
 
 # Attention ! Le nom de ce fichier apparait dans le programme d'installation.
-# Ce fichier permet le changement du path et du nom de /projetTut/liste_port.py
+# Ce fichier permet le changement du path et du nom de /projetTut/acquisition_donnees.py
 # sans avoir besoin de tout réinstaller dans le fichier init.d
