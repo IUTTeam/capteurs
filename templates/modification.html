@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <title>Modification</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome-free-5.13.0-web/css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome-free-5.13.0-web/css/solid.css') }}">
 </head>
 
 <body>
+    <h1>Modification d'un capteur</h1>
+    <a href="/"><i class="fas fa-home"></i></a>
     <form action="/enregistrer" method="POST">
-        <h1>Modification d'un capteur</h1>
         <p>
             <p>Type : {{ capteur.type }}</p>
         </p>
@@ -18,13 +21,12 @@
             <input type="text" name="nom-donnee" id="nom-donnee" value="{{ capteur.nom_mesure }}">
         </p>
         <p>
-            <label for="frequence"> Fréquence</label>
-            <input type="number" name="frequence" id="frequence" value="{{ capteur.delai }}">
+            <label for="frequence"> Fréquence : </label> s
+            <input type="text" name="frequence" id="frequence" value="{{ capteur.delai }}">
         </p>
         <input type="text" name="requete" value="{{ capteur.requete }}" hidden>
         <input type="submit" value="Modifier">
     </form>
-    <a href="/">Accueil</a>
 </body>
 
 </html>
