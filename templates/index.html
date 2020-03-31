@@ -5,21 +5,29 @@
     <meta charset="UTF-8">
     <title>Configuration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome-free-5.13.0-web/css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome-free-5.13.0-web/css/solid.css') }}">
+
 </head>
 
 <body>
-    {% for thread in liste %}
-    <div class="inline-block">
-        <p>Type : {{thread.type}}</p>
-        <p>Nom : {{thread.nom_mesure}}</p>
-        <p>Unité : {{thread.unite}}</p>
-        <p>Fréquence : {{thread.delai}} s</p>
-        <a href="modifier/{{ thread.requete }}">Modifier</a>
-        <a href="supprimer/{{ thread.requete }}">Supprimer</a>
-    </div>
-    {% endfor %}
+<h1>Administration des capteurs</h1>
+    <div class="container">
+        {% for thread in liste %}
+        <div class="inline-block">
+            <p>Type : {{thread.type}}</p>
+            <p>Nom : {{thread.nom_mesure}}</p>
+            <p>Unité : {{thread.unite}}</p>
+            <p>Fréquence : {{thread.delai}} s</p>
+            <a class="edit" href="modifier/{{ thread.requete }}"><i class="fas fa-edit"></i></a>
+            <a class="rouge"href="supprimer/{{ thread.requete }}"><i class="fas fa-trash"></i></a>
+        </div>
+        {% endfor %}
 
-    <a href="ajout">Ajouter un capteur</a>
+        <div class="inline-block test">
+            <a class="ajout" href="ajout"><i class="fas fa-plus"></i></a>
+        </div>
+    </div>
 </body>
 
 </html>

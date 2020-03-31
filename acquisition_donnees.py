@@ -40,7 +40,7 @@ def start():
     # création d'une première récolte de température
     th_temperature = communication.Communication(
         arduino, 5, consts.CAPTEUR_TEMPERATURE, "temperaturetest", mutex)
-    th_temperature.start()
+    # th_temperature.start()
     # ajout à la liste des acquisitions en cours
     threads_en_cours.append(th_temperature)
     capteurs_libre.remove(consts.CAPTEUR_TEMPERATURE)
