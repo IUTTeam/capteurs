@@ -1,5 +1,7 @@
 #include <math.h>
 
+#define analogSensorPin2 A3 // for KY-028 - Analog temperature 2
+
 #define analogLuminPin A4 // for KY-018 - Photoresistor
 
 #define analogSensorPin A5 // for KY-013 - Analog temperature
@@ -11,6 +13,7 @@
 const int READ_ANALOG_TEMP = 1;
 const int READ_DISTANCE = 2;
 const int READ_LUMINOSITE = 3;
+const int READ_ANALOG_TEMP_EXT = 4;
 
 const String START_MESSAGE = "Successfully initialised";
 
@@ -40,6 +43,9 @@ void loop() {
      case READ_LUMINOSITE:
         Serial.println(readLuminosite());
         break;
+     case READ_ANALOG_TEMP_EXT:
+        Serial.println(readAnalogTemperatureExt());
+        break;
       default:
         Serial.println("ERROR");
         break;
@@ -49,6 +55,18 @@ void loop() {
 
 double readAnalogTemperature() {
   int analogValue = analogRead(analogSensorPin);
+  double temp;
+  double rt;
+  double voltage = 5.0 * analogValue / 1023.0;
+  rt = 10000 * voltage / (5 - voltage);
+  temp = 1 / (((log(rt / 10000)) / 3950) + (1 / (273.15 + 25)));
+  temp = temp - 273.15;
+  return temp;
+}
+
+
+double readAnalogTemperatureExt() {
+  int analogValue = analogRead(analogSensorPin2);
   double temp;
   double rt;
   double voltage = 5.0 * analogValue / 1023.0;
