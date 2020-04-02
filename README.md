@@ -2,6 +2,9 @@
 
 > Pensez à lire la documentation *en entier* avant d'entreprendre quoi que ce soit, ça peut toujours servir (RTFM).
 
+Le programme python `acquisition_donnees.py` est conçu pour s'exécuter avec le programme `ArduinoModule` sur la carte Arduino.
+Le programme python offre une interface de gestion web disponible sur le port 5000 (`localhost:5000` ou `votre_ip_locale:5000`)
+
 ## Installation manuelle des modules complémentaires
 
 > **NOTA BENE** : Cette procédure n'est à suivre que pour des installations qui ont déjà été faites avec une version ancienne de l'installateur voire directement à la main.
